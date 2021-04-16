@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-curso-detalhe',
@@ -7,15 +8,27 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./curso-detalhe.component.css']
 })
 export class CursoDetalheComponent implements OnInit {
+  
+  id: string = '';
+  subscription: Subscription = new Subscription;
 
-  cursoId: string = '';
-
-  constructor(private route: ActivatedRoute) {
-    console.log(this.route);
-    this.cursoId = this.route.snapshot.params['id'];
+  constructor(private route: ActivatedRoute) {    
+    //this.id = this.route.snapshot.params['id'];
+    //console.log(this.route);
   }
 
+  //Usar os Life Cycle Hooks
   ngOnInit(): void {
+    this.subscription = this.route.params.subscribe(
+      (params: any) => {
+        this.id = params['id'];
+      }
+    );
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 
 }
